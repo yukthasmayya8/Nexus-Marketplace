@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // --- Users ---
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow list: if false;
+      allow create: if isSignedIn() && userId == request.auth.uid && 
+                       incoming().uid == request.auth.uid &&
+                       incoming().role in ['buyer', 'seller'] &&
+                       incoming().keys().hasAll(['uid', 'email', 'role', 'name', 'createdAt']) &&
+                       incoming().keys().size() == 5;
+      allow update: if isSignedIn() && userId == request.auth.uid &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name', 'role']);
+    }
+
+    // --- Products ---
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isSignedIn() && getUserRole() == 'seller' &&
+                       incoming().sellerId == request.auth.uid &&
+                       incoming().stock >= 0 &&
+                       incoming().price > 0 &&
+                       incoming().keys().hasAll(['sellerId', 'name', 'description', 'price', 'stock', 'category', 'imageUrl', 'createdAt', 'specifications']);
+      
+      allow update: if isSignedIn() && (
+        // Seller Action: Edit Product
+        (existing().sellerId == request.auth.uid && getUserRole() == 'seller') ||
+        // Buyer Action: Decrement Stock (Buy)
+        (incoming().diff(existing()).affectedKeys().hasOnly(['stock']) && 
+         incoming().stock >= 0)
+      );
+      
+      allow delete: if isSignedIn() && existing().sellerId == request.auth.uid && getUserRole() == 'seller';
+    }
+
+    // --- Orders ---
+    match /orders/{orderId} {
+      allow create: if isSignedIn() &&
+                       incoming().buyerId == request.auth.uid &&
+                       incoming().status == 'completed' &&
+                       incoming().keys().hasAll(['id', 'buyerId', 'items', 'total', 'status', 'createdAt']);
+      allow read: if isSignedIn() && (
+        resource.data.buyerId == request.auth.uid ||
+        getUserRole() == 'seller'
+      );
+    }
+
+    // --- Carts ---
+    match /carts/{userId} {
+      allow read, write: if isSignedIn() && userId == request.auth.uid;
+    }
+  }
+}

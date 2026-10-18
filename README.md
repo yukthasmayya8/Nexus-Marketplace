@@ -4,9 +4,21 @@
 
 # Narasimha Kripa Bazaar
 
-Narasimha Kripa Bazaar is a modern full-stack marketplace application that connects buyers and sellers through a simple and intuitive digital shopping experience.
+Narasimha Kripa Bazaar is a modern full-stack marketplace application that connects buyers and sellers through a simple, intuitive, and accessible digital shopping experience.
 
-The platform enables sellers to create and manage product listings, while buyers can browse products, manage a shopping cart, and place orders. Firebase provides authentication and data storage, while Gemini AI supports enhanced application functionality.
+The platform enables sellers to create and manage product listings, while buyers can browse products, manage a shopping cart, and place orders. Firebase provides authentication and data services, while Gemini-powered functionality supports an enhanced user experience.
+
+## Project Context
+
+Narasimha Kripa Bazaar was developed during a **Web Development Event at A. J. Institute of Technology, Mangalore**.
+
+The project was collaboratively developed by:
+
+- **Yuktha S. Mayya**
+- **Sanjana Desai**
+- **Ankitha Shanubhogh**
+
+The project provided an opportunity to apply modern web-development concepts, collaborate as a team, and build a functional marketplace application from idea to implementation.
 
 ## Features
 
@@ -35,20 +47,35 @@ The platform enables sellers to create and manage product listings, while buyers
 - Responsive and user-friendly interface
 - Product search and category-based browsing
 - Shopping cart and order management
-- AI-powered functionality through the Gemini API
+- AI-assisted functionality through the Gemini API
 - Interactive notifications and UI feedback
 
 ## Technology Stack
 
 - **Frontend:** React 19, TypeScript, and Vite
 - **Styling:** Tailwind CSS
-- **Backend Services:** Firebase
+- **Backend services:** Firebase
 - **Database:** Cloud Firestore
 - **Authentication:** Firebase Authentication
-- **AI Integration:** Google Gemini API
+- **AI integration:** Google Gemini API
 - **Icons:** Lucide React
 - **Animations:** Motion
 - **Notifications:** React Hot Toast
+
+## AI-Assisted Development
+
+Narasimha Kripa Bazaar was developed with assistance from **Google AI Studio** and the **Google Gemini API**.
+
+Google AI Studio supported the development process through:
+
+- Project ideation and feature exploration
+- User-interface and user-experience planning
+- Code-generation assistance
+- Debugging and implementation guidance
+- Iterative refinement of application functionality
+- Documentation and development workflow support
+
+The project team reviewed, adapted, and tested AI-assisted suggestions and generated code throughout development. AI tools were used as development assistants and did not replace the team's design decisions, implementation work, testing, or review.
 
 ## Project Structure
 
@@ -69,7 +96,7 @@ Nexus-Marketplace/
 
 ## Prerequisites
 
-Before running the project locally, install the following:
+Before running the project locally, install:
 
 - [Node.js](https://nodejs.org/)
 - npm, included with Node.js
